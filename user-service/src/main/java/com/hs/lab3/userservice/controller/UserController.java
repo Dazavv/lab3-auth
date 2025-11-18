@@ -114,6 +114,7 @@ public class UserController {
 
 
     @DeleteMapping(path = "/id/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public Mono<Void> deleteUserById(@PathVariable @Min(1) Long id) {
         return userService.deleteUserById(id)
                 .then(Mono.just(ResponseEntity.ok().build()).then());

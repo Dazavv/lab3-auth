@@ -8,7 +8,8 @@ public enum Role implements GrantedAuthority {
     VIEWER("VIEWER"),
     ADMIN("ADMIN"),
     REDACTOR("REDACTOR"),
-    LEAD("LEAD");
+    LEAD("LEAD"),
+    SUPERVISOR("SUPERVISOR");
 
     private final String value;
 
