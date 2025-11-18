@@ -1,6 +1,7 @@
 package com.hs.lab3.authservice.jwt;
 
 import com.hs.lab3.authservice.model.Role;
+import io.jsonwebtoken.Claims;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

@@ -1,7 +1,5 @@
 package com.hs.lab3.authservice.controller;
 
-
-import com.hs.lab2.authservice.dto.*;
 import com.hs.lab3.authservice.dto.*;
 import com.hs.lab3.authservice.service.AuthService;
 import lombok.RequiredArgsConstructor;

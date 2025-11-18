@@ -1,6 +1,6 @@
 package com.hs.lab3.authservice.jwt;
 
-import com.example.authorization.model.Role;
+import com.hs.lab3.authservice.model.Role;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.Authentication;
