@@ -1,0 +1,22 @@
+package com.hs.lab3.groupeventservice.client;
+
+import com.hs.lab3.groupeventservice.dto.responses.EventDto;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import reactivefeign.spring.config.ReactiveFeignClient;
+import reactor.core.publisher.Flux;
+
+import java.util.List;
+
+@Component
+@ReactiveFeignClient(name = "event-service")
+public interface EventClient {
+
+    @GetMapping("/api/v1/event/busy")
+    Flux<EventDto> getBusyEventsForUsersBetweenDates(
+            @RequestParam("userIds") List<Long> userIds,
+            @RequestParam("startDate") String startDate,
+            @RequestParam("endDate") String endDate
+    );
+}
