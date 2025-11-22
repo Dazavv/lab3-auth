@@ -1,7 +1,6 @@
 package com.hs.lab3.userservice.service;
 
 import com.hs.lab3.userservice.entity.User;
-import com.hs.lab3.userservice.exceptions.UserAlreadyExistsException;
 import com.hs.lab3.userservice.exceptions.UserNotFoundException;
 import com.hs.lab3.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,21 +20,6 @@ public class UserService {
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
-    public Mono<User> addUser(String username, String name, String surname) {
-        return Mono.fromCallable(() -> {
-            if (userRepository.existsByUsername(username)) {
-                throw new UserAlreadyExistsException("user with username = " + username + " already exists");
-            }
-
-            User user = new User();
-            user.setUsername(username);
-            user.setName(name);
-            user.setSurname(surname);
-
-            return userRepository.save(user);
-        }).subscribeOn(Schedulers.boundedElastic());
-    }
-
     public Mono<User> getUserById(Long id) {
         return Mono.fromCallable(() -> userRepository.findById(id)
                         .orElseThrow(() -> new UserNotFoundException("User with id = " + id + " not found")))
@@ -43,26 +27,25 @@ public class UserService {
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
-    public Mono<User> getUserByUsername(String username) {
-        return Mono.fromCallable(() -> userRepository.findByUsername(username)
-                        .orElseThrow(() -> new UserNotFoundException("User with username = " + username + " not found")))
+    public Mono<User> getUserByUsername(String login) {
+        return Mono.fromCallable(() -> userRepository.findByLogin(login)
+                        .orElseThrow(() -> new UserNotFoundException("User with login = " + login + " not found")))
 
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
     public Mono<Void> deleteUserById(Long id) {
         return Mono.fromRunnable(() -> {
-                    if (!userRepository.existsById(id))
-                        throw new UserNotFoundException("User with id = " + id + " not found");
-                    userRepository.deleteById(id);
-                })
-                .subscribeOn(Schedulers.boundedElastic())
-                .then();
+            if (!userRepository.existsById(id)) {
+                throw new UserNotFoundException("User with id = " + id + " not found");
+            }
+            userRepository.deleteById(id);
+        }).subscribeOn(Schedulers.boundedElastic()).then();
     }
 
     public Mono<Page<User>> searchByUsername(String query, Pageable pageable) {
         return Mono.fromCallable(() ->
-                        userRepository.findByUsernameContainingIgnoreCase(query, pageable)
+                        userRepository.findByLoginContainingIgnoreCase(query, pageable)
                 )
                 .subscribeOn(Schedulers.boundedElastic());
     }
