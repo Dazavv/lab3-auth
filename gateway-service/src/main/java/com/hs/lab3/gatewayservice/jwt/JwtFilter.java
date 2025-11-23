@@ -1,6 +1,7 @@
 package com.hs.lab3.gatewayservice.jwt;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -22,17 +24,18 @@ public class JwtFilter implements GlobalFilter {
 
         String token = extractToken(exchange);
 
-        if (token == null) {
+        if (token != null && jwtProvider.validateAccessToken(token)) {
             return chain.filter(exchange);
         }
 
-        if (!jwtProvider.validateAccessToken(token)) {
+        if (token != null) {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
 
         return chain.filter(exchange);
     }
+
 
     private String extractToken(ServerWebExchange exchange) {
         String header = exchange.getRequest()

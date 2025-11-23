@@ -13,8 +13,8 @@ import javax.crypto.SecretKey;
 public class JwtProvider {
     private final SecretKey accessKey;
 
-    public JwtProvider(@Value("${jwt.secret.access}") String secretBase64) {
-        this.accessKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretBase64));
+    public JwtProvider(@Value("${jwt.secret.access}") String accessKey) {
+        this.accessKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(accessKey));
     }
 
     public boolean validateAccessToken(String token) {
