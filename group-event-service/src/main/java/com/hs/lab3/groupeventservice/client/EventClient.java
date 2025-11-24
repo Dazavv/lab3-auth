@@ -9,8 +9,7 @@ import reactor.core.publisher.Flux;
 
 import java.util.List;
 
-@Component
-@ReactiveFeignClient(name = "event-service")
+@ReactiveFeignClient(name = "event-service", configuration = FeignConfig.class)
 public interface EventClient {
 
     @GetMapping("/api/v1/event/busy")

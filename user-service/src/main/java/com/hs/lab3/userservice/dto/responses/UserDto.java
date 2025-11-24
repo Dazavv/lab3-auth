@@ -1,11 +1,13 @@
 package com.hs.lab3.userservice.dto.responses;
 
-import java.util.List;
+import com.hs.lab3.userservice.enums.Role;
+import java.util.Set;
 
 public record UserDto(
         Long id,
-        String username,
+        String login,
         String name,
         String surname,
-        List<String> eventNames
+        String email,
+        Set<Role> roles
 ) {}

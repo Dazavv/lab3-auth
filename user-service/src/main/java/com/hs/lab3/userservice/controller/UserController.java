@@ -1,10 +1,8 @@
 package com.hs.lab3.userservice.controller;
 
-import com.hs.lab3.userservice.dto.UserDto;
+import com.hs.lab3.userservice.dto.responses.UserDto;
 import com.hs.lab3.userservice.mapper.UserMapper;
-import com.hs.lab3.userservice.requests.CreateUserRequest;
 import com.hs.lab3.userservice.service.UserService;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -26,18 +23,6 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
-
-    @PostMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public Mono<ResponseEntity<UserDto>> addUser(@Valid @RequestBody CreateUserRequest request) {
-        return userService.addUser(
-                        request.username(),
-                        request.name(),
-                        request.surname()
-                )
-                .map(userMapper::toUserDto)
-                .map(dto -> ResponseEntity.status(HttpStatus.CREATED).body(dto));
-    }
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('ADMIN', 'LEAD')")
@@ -68,7 +53,7 @@ public class UserController {
 
 
     @GetMapping(path = "/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'LEAD', 'SERVICE')")
     public Mono<ResponseEntity<UserDto>> getUserById(@PathVariable @Min(1) Long id) {
         return userService.getUserById(id)
                 .map(userMapper::toUserDto)
@@ -76,7 +61,6 @@ public class UserController {
     }
 
     @GetMapping(path = "/by-username/{username}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'LEAD')")
     public Mono<ResponseEntity<UserDto>> getUserByUsername(@PathVariable @NotBlank String username) {
         return userService.getUserByUsername(username)
                 .map(userMapper::toUserDto)
@@ -115,8 +99,8 @@ public class UserController {
 
     @DeleteMapping(path = "/id/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public Mono<Void> deleteUserById(@PathVariable @Min(1) Long id) {
+    public Mono<String> deleteUserById(@PathVariable @Min(1) Long id) {
         return userService.deleteUserById(id)
-                .then(Mono.just(ResponseEntity.ok().build()).then());
+                .thenReturn("User with id: " + id + " was deleted");
     }
 }

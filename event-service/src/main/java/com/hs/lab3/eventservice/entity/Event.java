@@ -1,4 +1,4 @@
-package java.com.hs.lab3.eventservice.entity;
+package com.hs.lab3.eventservice.entity;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

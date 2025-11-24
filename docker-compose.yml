@@ -102,7 +102,6 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-users:5432/users-db?sslmode=disable
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
-#      SPRING_R2DBC_URL: r2dbc:postgresql://postgres:postgres@postgres-users:5432/users-db
     depends_on:
       config-server:
         condition: service_healthy

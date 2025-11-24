@@ -16,6 +16,13 @@ public final class JwtUtils {
         jwtInfoToken.setRoles(getRoles(claims));
         jwtInfoToken.setEmail(claims.get("email", String.class));
         jwtInfoToken.setLogin(claims.getSubject());
+
+        Object idObj = claims.get("id");
+        if (idObj instanceof Integer) {
+            jwtInfoToken.setId(((Integer) idObj).longValue());
+        } else if (idObj instanceof Long) {
+            jwtInfoToken.setId((Long) idObj);
+        }
         return jwtInfoToken;
     }
 

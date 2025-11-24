@@ -1,7 +1,7 @@
-package java.com.hs.lab3.eventservice.mapper;
+package com.hs.lab3.eventservice.mapper;
 
-import java.com.hs.lab3.eventservice.dto.responses.EventDto;
-import java.com.hs.lab3.eventservice.entity.Event;
+import com.hs.lab3.eventservice.dto.responses.EventDto;
+import com.hs.lab3.eventservice.entity.Event;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 

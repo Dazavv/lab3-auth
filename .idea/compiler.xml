@@ -6,15 +6,21 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.40/398c6d2d7c42c96b65e78d2ddc9be0058c163453/lombok-1.18.40.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mapstruct/mapstruct-processor/1.5.5.Final/897f6f115930b936287bef552bf5fe28cc64717d/mapstruct-processor-1.5.5.Final.jar" />
         </processorPath>
-        <module name="user-service.main" />
+        <module name="gateway-service.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="auth-service" target="21" />
       <module name="com.hs.lab2.event-service" target="21" />
       <module name="com.hs.lab2.event-service.main" target="21" />
       <module name="com.hs.lab2.event-service.test" target="21" />
+      <module name="com.hs.lab2.gateway-service.main" target="21" />
+      <module name="com.hs.lab2.gateway-service.test" target="21" />
+      <module name="com.hs.lab3.event-service.main" target="21" />
+      <module name="com.hs.lab3.event-service.test" target="21" />
+      <module name="com.hs.lab3.gateway-service" target="21" />
+      <module name="event-service" target="21" />
       <module name="gateway_service" target="21" />
       <module name="gateway_service.main" target="21" />
       <module name="gateway_service.test" target="21" />
@@ -28,6 +34,12 @@
       <module name="com.hs.lab2.event-service" options="-parameters" />
       <module name="com.hs.lab2.event-service.main" options="-parameters" />
       <module name="com.hs.lab2.event-service.test" options="-parameters" />
+      <module name="com.hs.lab2.gateway-service.main" options="-parameters" />
+      <module name="com.hs.lab2.gateway-service.test" options="-parameters" />
+      <module name="com.hs.lab3.event-service" options="-parameters" />
+      <module name="com.hs.lab3.event-service.main" options="-parameters" />
+      <module name="com.hs.lab3.event-service.test" options="-parameters" />
+      <module name="com.hs.lab3.gateway-service" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="config-server.main" options="-parameters" />
       <module name="config-server.test" options="-parameters" />

@@ -1,12 +1,12 @@
-package java.com.hs.lab3.eventservice.service;
+package com.hs.lab3.eventservice.service;
 
-import java.com.hs.lab3.eventservice.client.UserClient;
-import java.com.hs.lab3.eventservice.dto.responses.UserDto;
-import java.com.hs.lab3.eventservice.entity.Event;
-import java.com.hs.lab3.eventservice.exceptions.EventConflictException;
-import java.com.hs.lab3.eventservice.exceptions.EventNotFoundException;
-import java.com.hs.lab3.eventservice.exceptions.UserNotFoundException;
-import java.com.hs.lab3.eventservice.repository.EventRepository;
+import com.hs.lab3.eventservice.client.UserClient;
+import com.hs.lab3.eventservice.dto.responses.UserDto;
+import com.hs.lab3.eventservice.entity.Event;
+import com.hs.lab3.eventservice.exceptions.EventConflictException;
+import com.hs.lab3.eventservice.exceptions.EventNotFoundException;
+import com.hs.lab3.eventservice.exceptions.UserNotFoundException;
+import com.hs.lab3.eventservice.repository.EventRepository;
 import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
@@ -69,6 +69,13 @@ public class EventService {
                         Mono.error(new RuntimeException("User-service error: " + e.status() + " " + e.getMessage()))
                 );
     }
+    public Flux<Event> getEventsByOwnerId(Long id) {
+        return eventRepository.findByOwnerId(id);
+    }
+
+    public Mono<Event> getEventByOwnerId(Long ownerId, Long id) {
+        return eventRepository.findByIdAndOwnerId(id, ownerId);
+    }
 
     public Mono<Event> getEventById(Long id) {
         return eventRepository.findById(id)
@@ -79,6 +86,10 @@ public class EventService {
         return eventRepository.findById(id)
                 .switchIfEmpty(Mono.error(new EventNotFoundException("Event with id = " + id + " not found")))
                 .flatMap(event -> eventRepository.deleteById(event.getId()));
+    }
+
+    public Mono<Void> deleteEventByOwnerId(Long ownerId, Long id) {
+        return eventRepository.deleteByIdAndOwnerId(id, ownerId);
     }
     public Flux<Event> getBusyEventsForUsersBetweenDates(List<Long> userIds,
                                                          LocalDate startDate,

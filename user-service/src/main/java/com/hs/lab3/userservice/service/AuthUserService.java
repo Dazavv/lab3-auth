@@ -21,8 +21,8 @@ public class AuthUserService {
         return userRepository.existsByLogin(login) || userRepository.existsByEmail(email);
     }
 
-    public void saveNewUser(User user) {
-        userRepository.save(user);
+    public User saveNewUser(User user) {
+        return userRepository.save(user);
     }
 
     public void addNewRole(User user, Role role) {

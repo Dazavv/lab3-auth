@@ -35,13 +35,18 @@ public class UserService {
     }
 
     public Mono<Void> deleteUserById(Long id) {
-        return Mono.fromRunnable(() -> {
-            if (!userRepository.existsById(id)) {
-                throw new UserNotFoundException("User with id = " + id + " not found");
-            }
-            userRepository.deleteById(id);
-        }).subscribeOn(Schedulers.boundedElastic()).then();
+        return Mono.fromCallable(() -> {
+                    if (!userRepository.existsById(id)) {
+                        throw new UserNotFoundException("User with id = " + id + " not found");
+                    }
+                    userRepository.deleteById(id);
+                    return true;
+                })
+                .subscribeOn(Schedulers.boundedElastic())
+                .then();
     }
+
+
 
     public Mono<Page<User>> searchByUsername(String query, Pageable pageable) {
         return Mono.fromCallable(() ->

@@ -1,6 +1,6 @@
-package java.com.hs.lab3.eventservice.repository;
+package com.hs.lab3.eventservice.repository;
 
-import java.com.hs.lab3.eventservice.entity.Event;
+import com.hs.lab3.eventservice.entity.Event;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
@@ -48,4 +48,10 @@ public interface EventRepository extends ReactiveCrudRepository<Event, Long> {
         SELECT COUNT(*) FROM events WHERE owner_id = :ownerId
     """)
     Mono<Long> countByOwnerId(Long ownerId);
+
+    Flux<Event> findByOwnerId(Long id);
+
+    Mono<Event> findByIdAndOwnerId(Long id, Long ownerId);
+
+    Mono<Void> deleteByIdAndOwnerId(Long id, Long ownerId);
 }

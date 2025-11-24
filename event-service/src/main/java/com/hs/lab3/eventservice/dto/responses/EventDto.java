@@ -1,4 +1,4 @@
-package java.com.hs.lab3.eventservice.dto.responses;
+package com.hs.lab3.eventservice.dto.responses;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

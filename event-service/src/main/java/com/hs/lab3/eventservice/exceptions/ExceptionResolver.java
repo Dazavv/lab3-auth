@@ -1,4 +1,4 @@
-package java.com.hs.lab3.eventservice.exceptions;
+package com.hs.lab3.eventservice.exceptions;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.ErrorMessage;

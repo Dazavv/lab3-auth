@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import reactivefeign.spring.config.EnableReactiveFeignClients;
 
 @SpringBootApplication
-@EnableReactiveFeignClients(basePackages = "com.hs.lab2.groupeventservice.client")
+@EnableReactiveFeignClients(basePackages = "com.hs.lab3.groupeventservice.client")
 public class GroupEventServiceApplication {
 
     public static void main(String[] args) {

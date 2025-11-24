@@ -5,11 +5,18 @@ import com.hs.lab3.userservice.dto.requests.LoginRequest;
 import com.hs.lab3.userservice.dto.requests.RefreshJwtRequest;
 import com.hs.lab3.userservice.dto.requests.RegisterRequest;
 import com.hs.lab3.userservice.dto.responses.JwtResponse;
+import com.hs.lab3.userservice.dto.responses.UserDto;
+import com.hs.lab3.userservice.enums.Role;
+import com.hs.lab3.userservice.jwt.JwtAuthentication;
+import com.hs.lab3.userservice.mapper.UserMapper;
 import com.hs.lab3.userservice.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +29,7 @@ import reactor.core.publisher.Mono;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserMapper userMapper;
 
     @PostMapping("/login")
     public Mono<JwtResponse> login(@RequestBody LoginRequest request) {
@@ -29,17 +37,21 @@ public class AuthController {
                 .login(request.getLogin(), request.getPassword());
     }
 
-    @PostMapping("/register")
+    @PostMapping(value = "/register")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Mono<ResponseEntity<?>> register(@RequestBody RegisterRequest request) {
+    public Mono<ResponseEntity<UserDto>> register(@RequestBody RegisterRequest request) {
+        if (request.getRole() == Role.SERVICE) {
+            return Mono.error(new AccessDeniedException("ADMIN cannot assign SERVICE role"));
+        }
         return authService.register(
                 request.getLogin(),
                 request.getPassword(),
                 request.getEmail(),
                 request.getFirstName(),
                 request.getLastName(),
-                request.getRole())
-                .thenReturn(ResponseEntity.status(HttpStatus.CREATED).build());
+                request.getRole()
+                ).map(userMapper::toUserDto)
+                .map(dto -> ResponseEntity.status(HttpStatus.CREATED).body(dto));
     }
 
     @PostMapping("/token")

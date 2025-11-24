@@ -13,6 +13,7 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -26,6 +27,7 @@ public class GroupEventController {
     private final RecommendationService recommendationService;
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'REDACTOR', 'LEAD')")
     public Mono<ResponseEntity<GroupEventDto>> addGroupEvent(@RequestBody CreateGroupEventRequest request) {
         return groupEventService.addGroupEvent(
                         request.name(),
@@ -39,12 +41,14 @@ public class GroupEventController {
 
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'REDACTOR', 'LEAD')")
     public Flux<GroupEventDto> getAllGroupEvents() {
         return groupEventService.getAllGroupEvents()
                 .map(groupEventMapper::toGroupEventDto);
     }
 
     @GetMapping(path = "/{id}")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN', 'REDACTOR', 'LEAD')")
     public Mono<ResponseEntity<GroupEventDto>> getGroupEventById(@PathVariable @Min(1) Long id) {
         return groupEventService.getGroupEventById(id)
                 .map(groupEventMapper::toGroupEventDto)
@@ -52,12 +56,14 @@ public class GroupEventController {
     }
 
     @DeleteMapping(path = "/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'REDACTOR', 'LEAD')")
     public Mono<ResponseEntity<Void>> deleteGroupEventById(@PathVariable @Min(1) Long id) {
         return groupEventService.deleteGroupEventById(id)
                 .then(Mono.just(ResponseEntity.ok().build()));
     }
 
     @PostMapping(path = "/recommend")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'REDACTOR', 'LEAD')")
     public Flux<RecommendTimeSlotDto> recommendGroupEvents(@RequestBody RecommendSlotsRequest request) {
         return recommendationService.recommendSlots(
                 request.periodStart(),
@@ -68,6 +74,7 @@ public class GroupEventController {
     }
 
     @PostMapping("/book")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'REDACTOR', 'LEAD')")
     public Mono<ResponseEntity<GroupEventDto>> bookGroupEvent(@Valid @RequestBody BookSlotRequest req) {
         return recommendationService.bookSlot(req.groupEventId(), req.date(), req.startTime(), req.endTime())
                 .map(ResponseEntity::ok);

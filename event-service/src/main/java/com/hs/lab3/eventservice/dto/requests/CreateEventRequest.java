@@ -1,4 +1,4 @@
-package java.com.hs.lab3.eventservice.dto.requests;
+package com.hs.lab3.eventservice.dto.requests;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
